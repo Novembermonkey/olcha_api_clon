@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
@@ -250,4 +251,7 @@ class CommentsViewSet(ModelViewSet):
     permission_classes = [permissions.OwnsOrReadOnly]
     pagination_class = MyPagination
 
+
+def homepage_url(request):
+    return HttpResponse( "This is homepage url! \n Enter 'admin/' to access admin page, \n 'olcha/' to access ecommerce, \n 'users/' for register, jwt login/logout and 'api/' to see profile ")
 

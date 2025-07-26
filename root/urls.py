@@ -20,8 +20,10 @@ from root import settings
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
+from olcha.views import homepage_url
 
 urlpatterns = [
+    path('', homepage_url, name='homepage'),
     path('admin/', admin.site.urls),
     path('olcha/', include('olcha.urls', namespace='olcha')),
     path('users/', include('users.urls', namespace='users')),
