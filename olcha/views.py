@@ -253,5 +253,5 @@ class CommentsViewSet(ModelViewSet):
 
 
 def homepage_url(request):
-    return HttpResponse( "This is homepage url! \n Enter 'admin/' to access admin page, \n 'olcha/' to access ecommerce, \n 'users/' for register, jwt login/logout and 'api/' to see profile ")
+    return HttpResponse( "This is homepage url!  Enter '/admin' to access admin page, \n '/olcha' to access ecommerce, \n '/users' for profile  then /register,  /login, /logout ")
 
