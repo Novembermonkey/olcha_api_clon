@@ -180,13 +180,12 @@ class CartViewSet(ModelViewSet):
     queryset = Cart.objects.none()#faqat o'zini cartini ko'ra oladi
 
 
-
     def get_cart(self, request):
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
         else:
             if not request.session.session_key:
-                request.session.save()
+                request.session.create()
             session_key = request.session.session_key
             cart, created = Cart.objects.get_or_create(guest_session_key=session_key)
         return cart

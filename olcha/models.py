@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.db.models import ForeignKey, Choices
 from django.utils.text import slugify
 from users.models import CustomUser
+from django.core.exceptions import ValidationError
 
 
 # Create your models here.
@@ -109,12 +110,22 @@ class Favorite(BaseModel):
 
 
 class Cart(BaseModel):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
-    guest_session_key = models.CharField(max_length=40, null=True, blank=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    guest_session_key = models.CharField(max_length=40, null=True, blank=True, unique=True)
 
     @property
     def total_cart_price(self):
         return sum(item.total_item_price for item in self.items.all())
+
+    def clean(self):
+        if self.user and self.guest_session_key:
+            raise ValidationError("Cart can't have both user and guest_session_key.")
+        if not self.user and not self.guest_session_key:
+            raise ValidationError("Cart must have either user or guest_session_key.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 class CartItem(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
